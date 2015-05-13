@@ -26,7 +26,7 @@ from boto.s3.bucket import Bucket
 from StringIO import StringIO
 from flask import Flask, request, jsonify
 
-class LogRelay(object):
+class LogCrypt(object):
     """
     Encrypt and upload logs to S3. This library assumes you've already imported
     your public key to the user's keychain that's using logcrypt. You can read
@@ -158,9 +158,9 @@ if __name__ == '__main__':
     S3_BUCKET = os.environ['UPLOAD_BUCKET']
     S3_PREFIX = os.environ['UPLOAD_PREFIX']
 
-    LOGCRYPT = LogRelay(RECIPIENT, S3_BUCKET, S3_PREFIX)
+    LOGCRYPT = LogCrypt(RECIPIENT, S3_BUCKET, S3_PREFIX)
 
     try:
         LOGCRYPT.run_server()
     except Exception, err:
-        LOGGER.critical(error)
+        LOGGER.critical(err)
