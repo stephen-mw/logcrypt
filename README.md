@@ -1,4 +1,5 @@
 # Logcrypt - encrypt and backup logs!
+[![Build Status](https://travis-ci.org/stephen-mw/logcrypt.svg)](https://travis-ci.org/stephen-mw/logcrypt)
 
 Logcrypt is a service that allows for easy, encrypted backups of logs in cloud environments. Have all of your hosts simply make a POST to the logcrypt endpoint and logs will automatically be encrypted, compressed, and stored away in S3.
 
@@ -27,6 +28,8 @@ Required environment variables:
 * ```KEY_HASH```: the key hash to load. E.g. ```40F62752```
 
 When the logcrypt service starts for the first time, it will request a gpg public key from the keyserver specified in the environment variable.
+
+The container itself uses the ubuntu 14.04 image from [phusion](https://github.com/phusion/baseimage-docker). Runit is used as the service manager.
 
 ## Using logcrypt
 Once the logcrypt container is installed and running, you simply need to make a POST from any of your hosts.
