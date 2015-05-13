@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+# Runit script for logcrypt (for phusion:baseimage docker)
+
+# Import the GPG public key used for encrypting logs
+echo "Using keyserver: $KEY_SERVER"
+echo "Using key hash: $KEY_HASH"
+
+setuser logcrypt gpg --keyserver $KEY_SERVER --recv-key $KEY_HASH
+
+# Run the command as the logcrypt user
+exec setuser logcrypt /home/logcrypt/.virtenv/bin/python /usr/local/bin/logcrypt.py
