@@ -4,11 +4,9 @@
 Logcrypt is a service that allows for easy, encrypted backups of logs in cloud environments. Have all of your hosts simply make a POST to the logcrypt endpoint and logs will automatically be encrypted, compressed, and stored away in S3.
 
 ## Why
-I manage a lot of hosts. Sometimes I spin up hundreds of them at one time. In order to save on costs, host bootstrapping has a built-in "self-destruct" method: if it senses something has gone wrong in its configuration, it turns off.
+I manage a lot of hosts. Sometimes I spin up hundreds of them at one time. In order to save on costs, host bootstrapping has a built-in "self-destruct" method: if it senses something has gone wrong in its configuration, the host will automatically turn itself off to save money.
 
-The self-destruct mechanism is great for keeping costs low, since it can take hours to notice that some auto-scaling group is behaving badly. However it makes it hard to do a post-mortem on the install since the host has to be turned on again to read logs.
-
-To make life easier for me a host will POST all of its logs to the logcrypt service if it senses failure. This means I can catch errors even before Splunk or rsyslog is setup, since the only requirement is curl!
+The mechnanism works great, but sometimes the host is shutoff even before monitoring or log shipping is turned on! To make it so post-mortems can always be completed, the instances will use logcrypt to securely upload their logs for a post-mortem regardless of where they are at in their bootstrap. The only thing they need is ```curl``` or some other way to make an HTTP POST.
 
 ## How it works
 Logcrypt uses asymmetrical gpg encryption. A public gpg key is imported and aes 256-bit encryption is used. lza compression keeps the file size low and removes the need to compress logs before storage.
@@ -36,6 +34,9 @@ Once the logcrypt container is installed and running, you simply need to make a 
 
 ```
 $ curl -XPOST 10.30.40.240:8080/upload?minion=my-host --data-binary @/var/log/syslog
+{
+  "message": "File created"
+}
 ```
 
 minion is the name of the host. The log uploaded will be called "my-host.gpg"

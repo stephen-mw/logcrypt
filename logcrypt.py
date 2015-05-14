@@ -163,4 +163,4 @@ if __name__ == '__main__':
     try:
         LOGCRYPT.run_server()
     except Exception, err:
-        LOGGER.critical(error)
+        LOGGER.critical(err)
